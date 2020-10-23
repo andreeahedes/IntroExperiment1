@@ -1,0 +1,15 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy as sp
+w, i= np.loadtxt('Data/blue1.csv', skiprows=34, delimiter=',', comments='[', unpack=1)
+plt.plot(w,i)
+plt.grid()
+plt.xlabel('Wavelenght(nm)')
+plt.ylabel('Intensity')
+plt.show()
+mean=np.mean(w)
+std=np.std(w,ddof=1)
+m= max(i)
+print(m)
+sterror=std/np.sqrt(len(w))
+print(mean,std,sterror)
