@@ -1,0 +1,30 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy as sp
+from scipy.optimize import curve_fit
+w, i= np.loadtxt('Data/led/yellow3.csv', skiprows=34, delimiter=',', comments='[', unpack=1)
+plt.plot(w,i,color='yellow')
+plt.grid()
+plt.xlabel('Wavelenght(nm)')
+plt.ylabel('Intensity')
+#plt.show()
+mean=np.mean(w)
+std=np.std(w,ddof=1)
+stderror=std/np.sqrt(len(w))
+m= max(i)
+#print(m)
+def gaussian(x, amp1,cen1,sigma1):
+    return amp1*(1/(sigma1*(np.sqrt(2*np.pi))))*(np.exp((-1.0/2.0)*(((x-cen1)/sigma1)**2)))
+amp0=m
+cen0=475
+sig0=std
+p0=[amp0,cen0,sig0]
+fit=curve_fit(gaussian, w, i, p0=p0)
+print('The peak wavelenght',fit[0][1])
+print('The standard error',stderror)
+print('The standard deviation', std)
+plt.plot(w,gaussian(w,*fit[0]))
+
+
+#sterror=std/np.sqrt(len(w))
+#print(mean,std,sterror)
