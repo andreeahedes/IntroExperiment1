@@ -1,0 +1,24 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy as sp
+
+V, Verr, I, Ierr = np.loadtxt('Data/sample_data/yellow_led2.csv', skiprows=4, delimiter=',', unpack=True)
+#Ierr=0.01#in mA
+#Verr=0.02#in V
+plt.grid()
+plt.xlabel('Voltage(Volts)')
+plt.ylabel('Current Intensity(mA)')
+plt.errorbar(V,I, xerr=Verr ,yerr= Ierr,capsize=2)
+plt.title('I-V Graph for diode 6')
+fit3, cov3=np.polyfit(V,I,1,w=1/Verr,cov=True)
+print(cov3)
+p3= np.poly1d(fit3)
+print('The equation of the line fitting the graph for diode 6', p3)
+std1=np.sqrt(cov3[0][0])
+std2=np.sqrt(cov3[1][1])
+error=np.sqrt((fit3[0]/std1)**2+(fit3[1]/std2)**2)
+print('The error for the threshold voltage is', error*1e-3)
+print('The value for the threshold voltage is', -fit3[1]/fit3[0])
+
+plt.plot(V, p3(V))
+plt.show()
