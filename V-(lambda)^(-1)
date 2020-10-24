@@ -1,0 +1,23 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy as sp
+
+V, lmd, Verr,lmderr= np.loadtxt('Dataleds.csv', skiprows=1,delimiter=',' ,unpack=True)
+freqerror=np.sqrt(1*lmderr**2/lmd**2)
+freq=1/lmd
+plt.grid()
+plt.xlabel('1/lamba in m^(-1)')
+plt.ylabel('The threshold voltage (Volts)')
+plt.errorbar(freq,V, xerr=freqerror, yerr=Verr,fmt='o', mew=2, ms=3, capsize=4)
+fit,cov=np.polyfit(freq,V,1,w=1/freqerror,cov=1)
+f=np.poly1d(fit)
+plt.plot(freq,f(freq))
+sigma1=np.sqrt(cov[0][0])
+sigma2=np.sqrt(cov[1][1])
+print('The line equation of the graph is ', f)
+print('The gradient of the graph is ', f[0], '+/-',sigma1)
+k=1.60217662e-19/299792458
+sigmafin=sigma1*k
+h=k*fit[0]
+print( 'The Planck constant is', k,'+/-',sigmafin)
+plt.show()
